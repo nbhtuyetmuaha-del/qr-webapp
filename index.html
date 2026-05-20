@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebApp Tạo QR</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #f3f4f6;
+      color: #111827;
+      padding: 6px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    h1 {
+      font-size: 16px;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .options {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .option-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #374151;
+      max-width: 100%;
+    }
+
+    .option-row input {
+      width: 16px;
+      height: 16px;
+      accent-color: #4f46e5;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .option-row span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    label.main-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #374151;
+    }
+
+    textarea {
+      width: 100%;
+      height: 82px;
+      min-height: 82px;
+      max-height: 82px;
+      resize: none;
+      overflow: auto;
+      white-space: pre;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 13px;
+      line-height: 1.4;
+      outline: none;
+      background: #fff;
+    }
+
+    textarea:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+    }
+
+    .actions {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      min-height: 40px;
+    }
+
+    .btn-primary {
+      background: #4f46e5;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #4338ca;
+    }
+
+    .btn-secondary {
+      background: #eef2ff;
+      color: #3730a3;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e7ff;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .btn-danger:hover {
+      background: #fecaca;
+    }
+
+    .status {
+      margin-top: 8px;
+      min-height: 18px;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #2563eb;
+    }
+
+    .preview {
+      margin-top: 8px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 8px;
+      display: none;
+    }
+
+    .preview-title {
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      color: #374151;
+    }
+
+    .preview-url {
+      font-size: 12px;
+      color: #111827;
+      word-break: break-all;
+      line-height: 1.35;
+    }
+
+    .preview-meta {
+      margin-top: 6px;
+      color: #6b7280;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .qr-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #qrcode {
+      width: 220px;
+      height: 220px;
+      min-width: 220px;
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border: 1px dashed #d1d5db;
+      border-radius: 12px;
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    #qrcode img,
+    #qrcode canvas {
+      max-width: 100% !important;
+      max-height: 100% !important;
+      border-radius: 4px;
+      image-rendering: pixelated;
+    }
+
+    .placeholder {
+      color: #9ca3af;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.4;
+      padding: 10px;
+    }
+
+    .current-text {
+      width: 100%;
+      font-size: 12px;
+      color: #4b5563;
+      text-align: left;
+      word-break: break-word;
+      line-height: 1.4;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 8px;
+    }
+
+    .tips {
+      width: 100%;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 11px;
+      color: #4b5563;
+      line-height: 1.45;
+    }
+
+    .tips b {
+      color: #111827;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .history-title {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 170px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .history-item {
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .history-item:hover {
+      background: #eef2ff;
+      border-color: #c7d2fe;
+    }
+
+    .history-text {
+      font-size: 12px;
+      font-weight: 700;
+      color: #111827;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 3px;
+    }
+
+    .history-time {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .empty-history {
+      color: #9ca3af;
+      text-align: center;
+      border: 1px dashed #d1d5db;
+      border-radius: 10px;
+      padding: 14px;
+      line-height: 1.4;
+      font-size: 12px;
+    }
+
+    @media (max-width: 480px) {
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      #qrcode {
+        width: 200px;
+        height: 200px;
+        min-width: 200px;
+        min-height: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="card">
+      <h1>WebApp Tạo QR</h1>
+      <p class="subtitle">
+        Dán văn bản, link TikTok hoặc link Shopee để tạo QR nhanh trong khung hẹp.
+      </p>
+
+      <div class="options">
+        <label class="option-row" for="optimizeLinks" title="Bỏ tham số theo dõi TikTok/Shopee để QR ngắn và dễ quét hơn">
+          <input type="checkbox" id="optimizeLinks" checked />
+          <span>Tự tối ưu link TikTok/Shopee</span>
+        </label>
+      </div>
+
+      <label class="main-label" for="textInput">Nội dung cần tạo QR</label>
+      <textarea id="textInput" wrap="off" placeholder="Ví dụ TikTok: https://www.tiktok.com/@tenkenh/video/1234567890?is_from_webapp=1&_t=...
+Ví dụ Shopee: https://shopee.vn/san-pham-i.123456.987654?sp_atk=...&xptdk=..."></textarea>
+
+      <div class="actions">
+        <button class="btn-secondary" id="pasteBtn">Dán từ Clipboard</button>
+        <button class="btn-primary" id="pasteCreateBtn">Dán & Tạo QR</button>
+        <button class="btn-primary" id="createBtn">Tạo QR</button>
+        <button class="btn-secondary" id="clearInputBtn">Xóa ô nhập</button>
+      </div>
+
+      <p class="status" id="status"></p>
+
+      <div class="preview" id="optimizedPreview">
+        <div class="preview-title">Nội dung QR sau tối ưu</div>
+        <div class="preview-url" id="optimizedText"></div>
+        <div class="preview-meta" id="optimizedMeta"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="qr-wrap">
+        <div id="qrcode">
+          <p class="placeholder">QR sẽ hiển thị tại đây</p>
+        </div>
+        <div class="current-text" id="currentText"></div>
+        <div class="tips">
+          <b>Mẹo:</b> link càng ngắn thì QR càng dễ quét. Với iPhone, nên giữ QR nền trắng, mã đen và hiển thị đủ lớn.
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="history-header">
+        <div class="history-title">Lịch sử tạo QR</div>
+        <button class="btn-danger" id="clearHistoryBtn">Xóa lịch sử</button>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </section>
+  </main>
+
+  <script>
+    const textInput = document.getElementById('textInput');
+    const optimizeLinks = document.getElementById('optimizeLinks');
+    const pasteBtn = document.getElementById('pasteBtn');
+    const pasteCreateBtn = document.getElementById('pasteCreateBtn');
+    const createBtn = document.getElementById('createBtn');
+    const clearInputBtn = document.getElementById('clearInputBtn');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+    const qrcodeBox = document.getElementById('qrcode');
+    const statusText = document.getElementById('status');
+    const currentText = document.getElementById('currentText');
+    const historyList = document.getElementById('historyList');
+    const optimizedPreview = document.getElementById('optimizedPreview');
+    const optimizedText = document.getElementById('optimizedText');
+    const optimizedMeta = document.getElementById('optimizedMeta');
+
+    const STORAGE_KEY = 'qr_history_compact_v1';
+
+    function setStatus(message, isError = false) {
+      statusText.textContent = message;
+      statusText.style.color = isError ? '#dc2626' : '#2563eb';
+    }
+
+    function getHistory() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveHistory(history) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    }
+
+    function formatTime(isoString) {
+      return new Date(isoString).toLocaleString('vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    }
+
+    function shortenText(text, max = 100) {
+      return text.length > max ? text.slice(0, max) + '...' : text;
+    }
+
+    function removeInvisibleChars(text) {
+      return text
+        .replace(/[\u200B-\u200D\uFEFF]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function stripTrailingPunctuation(url) {
+      return url.replace(/[\)\]\}\.,;!?'\"，。！？、]+$/g, '');
+    }
+
+    function isTikTokHost(hostname) {
+      const host = hostname.toLowerCase();
+      return host === 'tiktok.com' || host.endsWith('.tiktok.com');
+    }
+
+    function isShopeeHost(hostname) {
+      const host = hostname.toLowerCase();
+      return (
+        host === 'shopee.vn' ||
+        host.endsWith('.shopee.vn') ||
+        host === 'shp.ee' ||
+        host.endsWith('.shp.ee') ||
+        host === 's.shopee.vn' ||
+        host.endsWith('.shopee.sg') ||
+        host.endsWith('.shopee.co.id') ||
+        host.endsWith('.shopee.com.my') ||
+        host.endsWith('.shopee.ph') ||
+        host.endsWith('.shopee.co.th') ||
+        host.endsWith('.shopee.tw') ||
+        host.endsWith('.shopee.com.br') ||
+        host.endsWith('.shopee.com.mx')
+      );
+    }
+
+    function getLinkType(url) {
+      if (isTikTokHost(url.hostname)) return 'TikTok';
+      if (isShopeeHost(url.hostname)) return 'Shopee';
+      return '';
+    }
+
+    function findFirstOptimizableUrl(text) {
+      const parts = removeInvisibleChars(text).split(' ');
+
+      for (const part of parts) {
+        if (!part.startsWith('http://') && !part.startsWith('https://')) continue;
+
+        const cleaned = stripTrailingPunctuation(part);
+        try {
+          const url = new URL(cleaned);
+          const linkType = getLinkType(url);
+          if (linkType) return { rawUrl: cleaned, linkType };
+        } catch (error) {}
+      }
+
+      return null;
+    }
+
+    function normalizeInput(inputText) {
+      const original = removeInvisibleChars(inputText);
+
+      if (!optimizeLinks.checked) {
+        return {
+          finalText: original,
+          changed: false,
+          linkType: '',
+          originalLength: original.length,
+          finalLength: original.length
+        };
+      }
+
+      const found = findFirstOptimizableUrl(original);
+
+      if (!found) {
+        return {
+          finalText: original,
+          changed: false,
+          linkType: '',
+          originalLength: original.length,
+          finalLength: original.length
+        };
+      }
+
+      try {
+        const url = new URL(found.rawUrl);
+        url.hash = '';
+        url.search = '';
+
+        let finalUrl = url.toString();
+
+        if (found.linkType === 'TikTok' && /\/video\/[0-9]+\/?$/i.test(url.pathname) && finalUrl.endsWith('/')) {
+          finalUrl = finalUrl.slice(0, -1);
+        }
+
+        if (found.linkType === 'Shopee' && url.pathname !== '/' && finalUrl.endsWith('/')) {
+          finalUrl = finalUrl.slice(0, -1);
+        }
+
+        return {
+          finalText: finalUrl,
+          changed: finalUrl !== original,
+          linkType: found.linkType,
+          originalLength: original.length,
+          finalLength: finalUrl.length
+        };
+      } catch (error) {
+        return {
+          finalText: original,
+          changed: false,
+          linkType: '',
+          originalLength: original.length,
+          finalLength: original.length
+        };
+      }
+    }
+
+    function showOptimizedPreview(result) {
+      if (!result.finalText) {
+        optimizedPreview.style.display = 'none';
+        return;
+      }
+
+      optimizedPreview.style.display = 'block';
+      optimizedText.textContent = result.finalText;
+
+      const saved = result.originalLength - result.finalLength;
+      optimizedMeta.textContent =
+        'Độ dài ban đầu: ' + result.originalLength +
+        ' ký tự. Độ dài QR: ' + result.finalLength +
+        ' ký tự. ' +
+        (saved > 0 ? 'Giảm ' + saved + ' ký tự.' : 'Không giảm ký tự.');
+    }
+
+    function renderHistory() {
+      const history = getHistory();
+      historyList.innerHTML = '';
+
+      if (history.length === 0) {
+        historyList.innerHTML = '<div class="empty-history">Chưa có lịch sử.</div>';
+        return;
+      }
+
+      history.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.title = 'Bấm để tạo lại QR này';
+
+        div.innerHTML = `
+          <div class="history-text"></div>
+          <div class="history-time"></div>
+        `;
+
+        div.querySelector('.history-text').textContent = shortenText(item.text);
+        div.querySelector('.history-time').textContent = formatTime(item.createdAt);
+
+        div.addEventListener('click', () => {
+          textInput.value = item.text;
+          createQR(item.text, false);
+          setStatus('Đã tạo lại QR từ lịch sử.');
+        });
+
+        historyList.appendChild(div);
+      });
+    }
+
+    function addToHistory(text) {
+      let history = getHistory();
+      history = history.filter(item => item.text !== text);
+
+      history.unshift({
+        text,
+        createdAt: new Date().toISOString()
+      });
+
+      history = history.slice(0, 50);
+      saveHistory(history);
+      renderHistory();
+    }
+
+    function createQR(text, shouldSave = true) {
+      const content = text.trim();
+
+      if (!content) {
+        setStatus('Vui lòng nhập hoặc dán nội dung trước khi tạo QR.', true);
+        textInput.focus();
+        return;
+      }
+
+      const result = normalizeInput(content);
+      const finalContent = result.finalText;
+
+      qrcodeBox.innerHTML = '';
+
+      new QRCode(qrcodeBox, {
+        text: finalContent,
+        width: 200,
+        height: 200,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
+      currentText.textContent = finalContent;
+      showOptimizedPreview(result);
+
+      if (shouldSave) addToHistory(finalContent);
+
+      if (result.linkType && result.changed) {
+        setStatus('Đã tạo QR từ link ' + result.linkType + ' đã được tối ưu.');
+      } else if (result.linkType) {
+        setStatus('Đã tạo QR từ link ' + result.linkType + '.');
+      } else {
+        setStatus('Đã tạo QR.');
+      }
+    }
+
+    async function pasteFromClipboard(shouldCreate = false) {
+      try {
+        if (!navigator.clipboard || !navigator.clipboard.readText) {
+          setStatus('Trình duyệt chưa hỗ trợ đọc clipboard.', true);
+          return;
+        }
+
+        const text = await navigator.clipboard.readText();
+
+        if (!text.trim()) {
+          setStatus('Clipboard đang trống.', true);
+          return;
+        }
+
+        textInput.value = text;
+
+        if (shouldCreate) {
+          createQR(text, true);
+        } else {
+          const result = normalizeInput(text);
+          showOptimizedPreview(result);
+          setStatus('Đã dán nội dung từ Clipboard.');
+        }
+      } catch (error) {
+        setStatus('Không thể đọc Clipboard. Hãy cấp quyền cho trang web.', true);
+      }
+    }
+
+    pasteBtn.addEventListener('click', () => pasteFromClipboard(false));
+    pasteCreateBtn.addEventListener('click', () => pasteFromClipboard(true));
+    createBtn.addEventListener('click', () => createQR(textInput.value, true));
+
+    clearInputBtn.addEventListener('click', () => {
+      textInput.value = '';
+      optimizedPreview.style.display = 'none';
+      currentText.textContent = '';
+      setStatus('Đã xóa ô nhập.');
+      textInput.focus();
+    });
+
+    clearHistoryBtn.addEventListener('click', () => {
+      const ok = confirm('Bạn có chắc muốn xóa toàn bộ lịch sử?');
+      if (!ok) return;
+
+      localStorage.removeItem(STORAGE_KEY);
+      renderHistory();
+      setStatus('Đã xóa lịch sử.');
+    });
+
+    textInput.addEventListener('input', () => {
+      const content = textInput.value.trim();
+      if (!content) {
+        optimizedPreview.style.display = 'none';
+        return;
+      }
+
+      const result = normalizeInput(content);
+      showOptimizedPreview(result);
+    });
+
+    textInput.addEventListener('keydown', (event) => {
+      if (event.ctrlKey && event.key === 'Enter') {
+        createQR(textInput.value, true);
+      }
+    });
+
+    renderHistory();
+  </script>
+</body>
+</html>
