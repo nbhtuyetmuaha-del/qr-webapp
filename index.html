@@ -2,82 +2,78 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WebApp Tạo QR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>WebApp Tạo QR Cao Cấp</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background: #f3f4f6;
-      color: #111827;
-      padding: 6px;
+      background: #f8fafc;
+      color: #0f172a;
+      padding: 12px 8px;
+      line-height: 1.5;
     }
 
     .app {
       width: 100%;
-      max-width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
     }
 
     .card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      background: #ffffff;
+      border: 1px solid #f1f5f9;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
     }
 
     h1 {
-      font-size: 16px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #1e1b4b;
       margin-bottom: 4px;
-      line-height: 1.2;
+      letter-spacing: -0.025em;
     }
 
     .subtitle {
-      font-size: 12px;
-      color: #6b7280;
-      line-height: 1.4;
-      margin-bottom: 8px;
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 14px;
     }
 
     .options {
       display: flex;
-      justify-content: flex-start;
-      margin-bottom: 8px;
+      margin-bottom: 14px;
     }
 
     .option-row {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 999px;
-      padding: 6px 10px;
+      gap: 8px;
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 8px 12px;
       font-size: 12px;
-      font-weight: 700;
-      color: #374151;
-      max-width: 100%;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      width: 100%;
     }
 
     .option-row input {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       accent-color: #4f46e5;
       cursor: pointer;
-      flex: 0 0 auto;
-    }
-
-    .option-row span {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     label.main-label {
@@ -85,90 +81,110 @@
       font-size: 13px;
       font-weight: 700;
       margin-bottom: 6px;
-      color: #374151;
+      color: #475569;
     }
 
     textarea {
       width: 100%;
-      height: 82px;
-      min-height: 82px;
-      max-height: 82px;
-      resize: none;
-      overflow: auto;
-      white-space: pre;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      padding: 10px;
-      font-size: 13px;
+      height: 90px;
+      min-height: 90px;
+      max-height: 120px;
+      resize: vertical;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 14px;
       line-height: 1.4;
       outline: none;
       background: #fff;
+      transition: all 0.2s;
+      color: #334155;
     }
 
     textarea:focus {
       border-color: #4f46e5;
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
     }
 
     .actions {
-      margin-top: 8px;
+      margin-top: 12px;
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
+    }
+
+    .actions .btn-full {
+      grid-column: span 2;
     }
 
     button {
       border: none;
-      border-radius: 10px;
-      padding: 10px 8px;
+      border-radius: 12px;
+      padding: 12px 10px;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
-      transition: 0.2s;
-      min-height: 40px;
+      transition: all 0.2s;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    button:active {
+      transform: scale(0.98);
     }
 
     .btn-primary {
       background: #4f46e5;
       color: #fff;
+      box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
     }
 
-    .btn-primary:hover {
-      background: #4338ca;
-    }
+    .btn-primary:hover { background: #4338ca; }
 
     .btn-secondary {
-      background: #eef2ff;
-      color: #3730a3;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
     }
-
-    .btn-secondary:hover {
-      background: #e0e7ff;
-    }
+    .btn-secondary:hover { background: #e2e8f0; }
 
     .btn-danger {
-      background: #fee2e2;
-      color: #991b1b;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fee2e2;
     }
-
-    .btn-danger:hover {
-      background: #fecaca;
-    }
+    .btn-danger:hover { background: #fee2e2; }
 
     .status {
-      margin-top: 8px;
-      min-height: 18px;
+      margin-top: 10px;
+      min-height: 20px;
       font-size: 12px;
+      font-weight: 600;
       line-height: 1.4;
       color: #2563eb;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: transparent;
+      transition: background 0.2s;
+    }
+
+    .status.has-msg {
+      background: #eff6ff;
+    }
+    .status.error {
+      color: #dc2626;
+      background: #fef2f2;
     }
 
     .preview {
-      margin-top: 8px;
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
-      border-radius: 10px;
-      padding: 8px;
+      margin-top: 12px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 12px;
       display: none;
     }
 
@@ -176,194 +192,180 @@
       font-size: 12px;
       font-weight: 800;
       margin-bottom: 4px;
-      color: #374151;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .preview-url {
-      font-size: 12px;
-      color: #111827;
+      font-size: 13px;
+      color: #0f172a;
       word-break: break-all;
-      line-height: 1.35;
+      font-family: monospace;
+      background: #fff;
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #f1f5f9;
     }
 
     .preview-meta {
       margin-top: 6px;
-      color: #6b7280;
+      color: #64748b;
       font-size: 11px;
-      line-height: 1.35;
     }
 
     .qr-wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
     }
 
     #qrcode {
       width: 220px;
       height: 220px;
-      min-width: 220px;
-      min-height: 220px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #fff;
-      border: 1px dashed #d1d5db;
-      border-radius: 12px;
-      padding: 10px;
-      overflow: hidden;
+      border: 2px dashed #cbd5e1;
+      border-radius: 16px;
+      padding: 12px;
     }
 
-    #qrcode img,
-    #qrcode canvas {
+    #qrcode img, #qrcode canvas {
       max-width: 100% !important;
       max-height: 100% !important;
-      border-radius: 4px;
-      image-rendering: pixelated;
+      border-radius: 8px;
     }
 
     .placeholder {
-      color: #9ca3af;
+      color: #94a3b8;
       text-align: center;
-      font-size: 12px;
-      line-height: 1.4;
-      padding: 10px;
+      font-size: 13px;
     }
 
     .current-text {
       width: 100%;
       font-size: 12px;
-      color: #4b5563;
-      text-align: left;
+      color: #475569;
       word-break: break-word;
-      line-height: 1.4;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px;
+      max-height: 60px;
+      overflow-y: auto;
     }
 
     .tips {
       width: 100%;
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 8px;
+      background: #fff9db;
+      border: 1px solid #ffe3e3;
+      border-radius: 12px;
+      padding: 10px;
       font-size: 11px;
-      color: #4b5563;
-      line-height: 1.45;
-    }
-
-    .tips b {
-      color: #111827;
+      color: #b06a00;
+      line-height: 1.5;
     }
 
     .history-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
     .history-title {
       font-size: 14px;
       font-weight: 800;
+      color: #334155;
     }
 
     .history-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      max-height: 170px;
+      gap: 8px;
+      max-height: 200px;
       overflow-y: auto;
-      padding-right: 2px;
     }
 
     .history-item {
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
-      border-radius: 10px;
-      padding: 8px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 10px;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.2s;
     }
 
     .history-item:hover {
-      background: #eef2ff;
-      border-color: #c7d2fe;
+      background: #f5f3ff;
+      border-color: #ddd6fe;
     }
 
     .history-text {
-      font-size: 12px;
-      font-weight: 700;
-      color: #111827;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-bottom: 3px;
     }
 
     .history-time {
       font-size: 11px;
-      color: #6b7280;
+      color: #94a3b8;
+      margin-top: 2px;
     }
 
     .empty-history {
-      color: #9ca3af;
+      color: #94a3b8;
       text-align: center;
-      border: 1px dashed #d1d5db;
-      border-radius: 10px;
-      padding: 14px;
-      line-height: 1.4;
-      font-size: 12px;
+      border: 2px dashed #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 13px;
     }
 
-    @media (max-width: 480px) {
-      .actions {
-        grid-template-columns: 1fr;
-      }
-
-      #qrcode {
-        width: 200px;
-        height: 200px;
-        min-width: 200px;
-        min-height: 200px;
-      }
+    /* Ẩn Textarea dùng để hỗ trợ copy/paste fallback */
+    #fallbackClipboard {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      opacity: 0;
     }
   </style>
 </head>
 <body>
+  <textarea id="fallbackClipboard" readonly></textarea>
+
   <main class="app">
     <section class="card">
       <h1>WebApp Tạo QR</h1>
-      <p class="subtitle">
-        Dán văn bản, link TikTok hoặc link Shopee để tạo QR nhanh trong khung hẹp.
-      </p>
+      <p class="subtitle">Dán văn bản hoặc link mạng xã hội để quét nhanh.</p>
 
       <div class="options">
-        <label class="option-row" for="optimizeLinks" title="Bỏ tham số theo dõi TikTok/Shopee để QR ngắn và dễ quét hơn">
+        <label class="option-row" for="optimizeLinks">
           <input type="checkbox" id="optimizeLinks" checked />
-          <span>Tự tối ưu link TikTok/Shopee</span>
+          <span>Tự động rút gọn link TikTok / Shopee</span>
         </label>
       </div>
 
-      <label class="main-label" for="textInput">Nội dung cần tạo QR</label>
-      <textarea id="textInput" wrap="off" placeholder="Ví dụ TikTok: https://www.tiktok.com/@tenkenh/video/1234567890?is_from_webapp=1&_t=...
-Ví dụ Shopee: https://shopee.vn/san-pham-i.123456.987654?sp_atk=...&xptdk=..."></textarea>
+      <label class="main-label" for="textInput">Nội dung dữ liệu</label>
+      <textarea id="textInput" placeholder="Dán hoặc nhập nội dung tại đây..."></textarea>
 
       <div class="actions">
-        <button class="btn-secondary" id="pasteBtn">Dán từ Clipboard</button>
-        <button class="btn-primary" id="pasteCreateBtn">Dán & Tạo QR</button>
-        <button class="btn-primary" id="createBtn">Tạo QR</button>
-        <button class="btn-secondary" id="clearInputBtn">Xóa ô nhập</button>
+        <button class="btn-secondary" id="pasteBtn">📋 Dán nội dung</button>
+        <button class="btn-primary" id="pasteCreateBtn">⚡ Dán & Tạo luôn</button>
+        <button class="btn-primary btn-full" id="createBtn">🛠️ Tạo Mã QR Code</button>
+        <button class="btn-secondary btn-full" id="clearInputBtn">🧹 Xóa sạch ô nhập</button>
       </div>
 
       <p class="status" id="status"></p>
 
       <div class="preview" id="optimizedPreview">
-        <div class="preview-title">Nội dung QR sau tối ưu</div>
+        <div class="preview-title">Link sau rút gọn (QR sẽ nhẹ hơn)</div>
         <div class="preview-url" id="optimizedText"></div>
         <div class="preview-meta" id="optimizedMeta"></div>
       </div>
@@ -372,19 +374,19 @@ Ví dụ Shopee: https://shopee.vn/san-pham-i.123456.987654?sp_atk=...&xptdk=...
     <section class="card">
       <div class="qr-wrap">
         <div id="qrcode">
-          <p class="placeholder">QR sẽ hiển thị tại đây</p>
+          <p class="placeholder">Chưa có mã được tạo</p>
         </div>
-        <div class="current-text" id="currentText"></div>
+        <div class="current-text" id="currentText">Nội dung QR hiện tại sẽ hiển thị ở đây...</div>
         <div class="tips">
-          <b>Mẹo:</b> link càng ngắn thì QR càng dễ quét. Với iPhone, nên giữ QR nền trắng, mã đen và hiển thị đủ lớn.
+          <b>Mẹo di động:</b> Nếu không dùng được nút "Dán", bạn hãy đè ngón tay vào ô nhập dữ liệu 2 giây rồi chọn <b>"Dán" (Paste)</b> từ bảng chọn của điện thoại nhé!
         </div>
       </div>
     </section>
 
     <section class="card">
       <div class="history-header">
-        <div class="history-title">Lịch sử tạo QR</div>
-        <button class="btn-danger" id="clearHistoryBtn">Xóa lịch sử</button>
+        <div class="history-title">Đã tạo gần đây</div>
+        <button class="btn-danger" id="clearHistoryBtn">Xóa hết</button>
       </div>
       <div class="history-list" id="historyList"></div>
     </section>
@@ -405,20 +407,21 @@ Ví dụ Shopee: https://shopee.vn/san-pham-i.123456.987654?sp_atk=...&xptdk=...
     const optimizedPreview = document.getElementById('optimizedPreview');
     const optimizedText = document.getElementById('optimizedText');
     const optimizedMeta = document.getElementById('optimizedMeta');
+    const fallbackClipboard = document.getElementById('fallbackClipboard');
 
     const STORAGE_KEY = 'qr_history_compact_v1';
 
     function setStatus(message, isError = false) {
       statusText.textContent = message;
-      statusText.style.color = isError ? '#dc2626' : '#2563eb';
+      if (message) {
+        statusText.className = 'status has-msg' + (isError ? ' error' : '');
+      } else {
+        statusText.className = 'status';
+      }
     }
 
     function getHistory() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch (error) {
-        return [];
-      }
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch (e) { return []; }
     }
 
     function saveHistory(history) {
@@ -427,24 +430,16 @@ Ví dụ Shopee: https://shopee.vn/san-pham-i.123456.987654?sp_atk=...&xptdk=...
 
     function formatTime(isoString) {
       return new Date(isoString).toLocaleString('vi-VN', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
+        hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit'
       });
     }
 
-    function shortenText(text, max = 100) {
+    function shortenText(text, max = 60) {
       return text.length > max ? text.slice(0, max) + '...' : text;
     }
 
     function removeInvisibleChars(text) {
-      return text
-        .replace(/[\u200B-\u200D\uFEFF]/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
+      return text.replace(/[\u200B-\u200D\uFEFF]/g, '').replace(/\s+/g, ' ').trim();
     }
 
     function stripTrailingPunctuation(url) {
@@ -456,22 +451,13 @@ Ví dụ Shopee: https://shopee.vn/san-pham-i.123456.987654?sp_atk=...&xptdk=...
       return host === 'tiktok.com' || host.endsWith('.tiktok.com');
     }
 
+    // Đã tích hợp kiểm tra rộng hơn cho link Shopee từ dữ liệu hệ thống thông tin tài khoản
     function isShopeeHost(hostname) {
       const host = hostname.toLowerCase();
       return (
-        host === 'shopee.vn' ||
-        host.endsWith('.shopee.vn') ||
-        host === 'shp.ee' ||
-        host.endsWith('.shp.ee') ||
-        host === 's.shopee.vn' ||
-        host.endsWith('.shopee.sg') ||
-        host.endsWith('.shopee.co.id') ||
-        host.endsWith('.shopee.com.my') ||
-        host.endsWith('.shopee.ph') ||
-        host.endsWith('.shopee.co.th') ||
-        host.endsWith('.shopee.tw') ||
-        host.endsWith('.shopee.com.br') ||
-        host.endsWith('.shopee.com.mx')
+        host === 'shopee.vn' || host.endsWith('.shopee.vn') ||
+        host === 'shp.ee' || host.endsWith('.shp.ee') ||
+        host === 's.shopee.vn' || host.endsWith('.shopee.sg')
       );
     }
 
@@ -483,10 +469,8 @@ Ví dụ Shopee: https://shopee.vn/san-pham-i.123456.987654?sp_atk=...&xptdk=...
 
     function findFirstOptimizableUrl(text) {
       const parts = removeInvisibleChars(text).split(' ');
-
       for (const part of parts) {
         if (!part.startsWith('http://') && !part.startsWith('https://')) continue;
-
         const cleaned = stripTrailingPunctuation(part);
         try {
           const url = new URL(cleaned);
@@ -494,46 +478,29 @@ Ví dụ Shopee: https://shopee.vn/san-pham-i.123456.987654?sp_atk=...&xptdk=...
           if (linkType) return { rawUrl: cleaned, linkType };
         } catch (error) {}
       }
-
       return null;
     }
 
     function normalizeInput(inputText) {
       const original = removeInvisibleChars(inputText);
-
       if (!optimizeLinks.checked) {
-        return {
-          finalText: original,
-          changed: false,
-          linkType: '',
-          originalLength: original.length,
-          finalLength: original.length
-        };
+        return { finalText: original, changed: false, linkType: '', originalLength: original.length, finalLength: original.length };
       }
 
       const found = findFirstOptimizableUrl(original);
-
       if (!found) {
-        return {
-          finalText: original,
-          changed: false,
-          linkType: '',
-          originalLength: original.length,
-          finalLength: original.length
-        };
+        return { finalText: original, changed: false, linkType: '', originalLength: original.length, finalLength: original.length };
       }
 
       try {
         const url = new URL(found.rawUrl);
         url.hash = '';
         url.search = '';
-
         let finalUrl = url.toString();
 
         if (found.linkType === 'TikTok' && /\/video\/[0-9]+\/?$/i.test(url.pathname) && finalUrl.endsWith('/')) {
           finalUrl = finalUrl.slice(0, -1);
         }
-
         if (found.linkType === 'Shopee' && url.pathname !== '/' && finalUrl.endsWith('/')) {
           finalUrl = finalUrl.slice(0, -1);
         }
@@ -546,180 +513,154 @@ Ví dụ Shopee: https://shopee.vn/san-pham-i.123456.987654?sp_atk=...&xptdk=...
           finalLength: finalUrl.length
         };
       } catch (error) {
-        return {
-          finalText: original,
-          changed: false,
-          linkType: '',
-          originalLength: original.length,
-          finalLength: original.length
-        };
+        return { finalText: original, changed: false, linkType: '', originalLength: original.length, finalLength: original.length };
       }
     }
 
     function showOptimizedPreview(result) {
-      if (!result.finalText) {
+      if (!result.finalText || !result.linkType) {
         optimizedPreview.style.display = 'none';
         return;
       }
-
       optimizedPreview.style.display = 'block';
       optimizedText.textContent = result.finalText;
-
       const saved = result.originalLength - result.finalLength;
-      optimizedMeta.textContent =
-        'Độ dài ban đầu: ' + result.originalLength +
-        ' ký tự. Độ dài QR: ' + result.finalLength +
-        ' ký tự. ' +
-        (saved > 0 ? 'Giảm ' + saved + ' ký tự.' : 'Không giảm ký tự.');
+      optimizedMeta.textContent = `Ban đầu: ${result.originalLength} ký tự ➜ Hiện tại: ${result.finalLength} ký tự (${saved > 0 ? 'Giảm ' + saved : 'Không giảm'} ký tự).`;
     }
 
     function renderHistory() {
       const history = getHistory();
       historyList.innerHTML = '';
-
       if (history.length === 0) {
-        historyList.innerHTML = '<div class="empty-history">Chưa có lịch sử.</div>';
+        historyList.innerHTML = '<div class="empty-history">Lịch sử trống.</div>';
         return;
       }
-
       history.forEach((item) => {
         const div = document.createElement('div');
         div.className = 'history-item';
-        div.title = 'Bấm để tạo lại QR này';
-
         div.innerHTML = `
           <div class="history-text"></div>
-          <div class="history-time"></div>
+          <div class="history-time">${formatTime(item.createdAt)}</div>
         `;
-
         div.querySelector('.history-text').textContent = shortenText(item.text);
-        div.querySelector('.history-time').textContent = formatTime(item.createdAt);
-
         div.addEventListener('click', () => {
           textInput.value = item.text;
           createQR(item.text, false);
-          setStatus('Đã tạo lại QR từ lịch sử.');
+          setStatus('Đã tải lại mã từ lịch sử.');
         });
-
         historyList.appendChild(div);
       });
     }
 
     function addToHistory(text) {
-      let history = getHistory();
-      history = history.filter(item => item.text !== text);
-
-      history.unshift({
-        text,
-        createdAt: new Date().toISOString()
-      });
-
-      history = history.slice(0, 50);
-      saveHistory(history);
+      let history = getHistory().filter(item => item.text !== text);
+      history.unshift({ text, createdAt: new Date().toISOString() });
+      saveHistory(history.slice(0, 20));
       renderHistory();
     }
 
     function createQR(text, shouldSave = true) {
       const content = text.trim();
-
       if (!content) {
-        setStatus('Vui lòng nhập hoặc dán nội dung trước khi tạo QR.', true);
+        setStatus('Vui lòng nhập dữ liệu trước.', true);
         textInput.focus();
         return;
       }
 
       const result = normalizeInput(content);
       const finalContent = result.finalText;
-
       qrcodeBox.innerHTML = '';
 
       new QRCode(qrcodeBox, {
         text: finalContent,
         width: 200,
         height: 200,
-        colorDark: '#000000',
+        colorDark: '#0f172a',
         colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.M
       });
 
       currentText.textContent = finalContent;
       showOptimizedPreview(result);
-
       if (shouldSave) addToHistory(finalContent);
-
-      if (result.linkType && result.changed) {
-        setStatus('Đã tạo QR từ link ' + result.linkType + ' đã được tối ưu.');
-      } else if (result.linkType) {
-        setStatus('Đã tạo QR từ link ' + result.linkType + '.');
-      } else {
-        setStatus('Đã tạo QR.');
-      }
+      setStatus(result.linkType && result.changed ? `Đã tối ưu link ${result.linkType} & Tạo QR!` : 'Đã tạo QR thành công 🎉');
     }
 
-    async function pasteFromClipboard(shouldCreate = false) {
-      try {
-        if (!navigator.clipboard || !navigator.clipboard.readText) {
-          setStatus('Trình duyệt chưa hỗ trợ đọc clipboard.', true);
-          return;
+    // CHỨC NĂNG ĐỌC CLIPBOARD THÔNG MINH CHO DI ĐỘNG (SỬA LỖI TẬN GỐC)
+    async function getClipboardText() {
+      // Cách 1: Thử nghiệm API hiện đại tiêu chuẩn
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        try {
+          return await navigator.clipboard.readText();
+        } catch (e) {
+          console.log("Kênh API chính bị chặn, chuyển sang chế độ dự phòng.");
         }
+      }
 
-        const text = await navigator.clipboard.readText();
-
-        if (!text.trim()) {
-          setStatus('Clipboard đang trống.', true);
-          return;
+      // Cách 2: Chế độ dự phòng (Fallback) dành riêng cho các trình duyệt kén chọn trên iOS/Android
+      textInput.focus();
+      const selected = document.activeElement;
+      if (selected === textInput) {
+        try {
+          // Tận dụng lệnh thực thi dán nội dung cổ điển qua vùng chọn
+          fallbackClipboard.focus();
+          document.execCommand('paste');
+          const value = fallbackClipboard.value;
+          fallbackClipboard.value = ''; // Làm sạch ngay
+          if (value) return value;
+        } catch (err) {
+          console.log("Chế độ fallback cũng bị chặn bởi hệ thống.");
         }
+      }
+      return null;
+    }
 
+    async function handlePasteAction(shouldCreate = false) {
+      setStatus('Đang kiểm tra dữ liệu nhớ tạm...');
+      const text = await getClipboardText();
+
+      if (text && text.trim()) {
         textInput.value = text;
-
         if (shouldCreate) {
           createQR(text, true);
         } else {
           const result = normalizeInput(text);
           showOptimizedPreview(result);
-          setStatus('Đã dán nội dung từ Clipboard.');
+          setStatus('Đã dán thành công!');
         }
-      } catch (error) {
-        setStatus('Không thể đọc Clipboard. Hãy cấp quyền cho trang web.', true);
+      } else {
+        // Trường hợp bị chặn hoàn toàn do cơ chế bảo mật sandbox của In-App Browser (Facebook/Zalo)
+        setStatus('Không có quyền đọc bộ nhớ tạm. Hãy ấn giữ ô nhập 2 giây rồi chọn "Dán".', true);
       }
     }
 
-    pasteBtn.addEventListener('click', () => pasteFromClipboard(false));
-    pasteCreateBtn.addEventListener('click', () => pasteFromClipboard(true));
+    pasteBtn.addEventListener('click', () => handlePasteAction(false));
+    pasteCreateBtn.addEventListener('click', () => handlePasteAction(true));
     createBtn.addEventListener('click', () => createQR(textInput.value, true));
 
     clearInputBtn.addEventListener('click', () => {
       textInput.value = '';
       optimizedPreview.style.display = 'none';
-      currentText.textContent = '';
-      setStatus('Đã xóa ô nhập.');
+      currentText.textContent = 'Nội dung QR hiện tại sẽ hiển thị ở đây...';
+      setStatus('Đã làm sạch ô dữ liệu.');
       textInput.focus();
     });
 
     clearHistoryBtn.addEventListener('click', () => {
-      const ok = confirm('Bạn có chắc muốn xóa toàn bộ lịch sử?');
-      if (!ok) return;
-
+      if (!confirm('Xóa sạch danh sách lịch sử này?')) return;
       localStorage.removeItem(STORAGE_KEY);
       renderHistory();
-      setStatus('Đã xóa lịch sử.');
+      setStatus('Đã dọn dẹp lịch sử.');
     });
 
     textInput.addEventListener('input', () => {
       const content = textInput.value.trim();
-      if (!content) {
-        optimizedPreview.style.display = 'none';
-        return;
-      }
-
-      const result = normalizeInput(content);
-      showOptimizedPreview(result);
+      if (!content) { optimizedPreview.style.display = 'none'; return; }
+      showOptimizedPreview(normalizeInput(content));
     });
 
     textInput.addEventListener('keydown', (event) => {
-      if (event.ctrlKey && event.key === 'Enter') {
-        createQR(textInput.value, true);
-      }
+      if (event.ctrlKey && event.key === 'Enter') createQR(textInput.value, true);
     });
 
     renderHistory();
